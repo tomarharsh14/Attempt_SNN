@@ -17,17 +17,20 @@ def MaxPooling(inp, size=2, stride=2):
        d = 1
     else:
        h,w,d = inp.shape
-    
-    kh = int(math.ceil((h-size)/float(stride) + 1))
+ 
+# ========To take care of uneven kernel size with image========   
+    kh = int(math.ceil((h-size)/float(stride) + 1))  
     kw = int(math.ceil((w-size)/float(stride) + 1))
 
     h = int(math.ceil(kh)*stride + size)
     w = int(math.ceil(kw)*stride + size)
-
+# =============================================================
     out = np.zeros((kh,kw,d))
-    # Iterate over values
+ 
+# ========Iteration over the image(s)==========================
     for z in range(d):                         # Iterate inwards last
         for y in range(0,h-size,stride):       # Iterate downwards second
            for x in range(0,w-size,stride):    # Iterate sideways first
                out[y/stride, x/stride, z] = np.amax(inp[y:y+size,x:x+size,z])
+# ============================================================= 
     return out
