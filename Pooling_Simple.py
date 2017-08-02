@@ -7,6 +7,7 @@ Created on Tue Aug  1 15:15:54 2017
 @author: htomar
 """
 import numpy as np
+import math
 
 # Square Window of default size 2 with stride 2
 def MaxPooling(inp, size=2, stride=2):
@@ -17,18 +18,15 @@ def MaxPooling(inp, size=2, stride=2):
     else:
        h,w,d = inp.shape
     
-    kh = (h-size)/float(stride) + 1
-    kw = (w-size)/float(stride) + 1
-    # Check Feasability
-    if not ((kh).is_integer()):
-        print "Dimension of MaxPool and Input Don't Satisfy"
-        return
-    if not ((kw).is_integer()):
-        print "Dimension of MaxPool and Input Don't Satisfy"
-        return
-    out = np.zeros((int(kh),int(kw),d))
+    kh = int(math.ceil((h-size)/float(stride) + 1))
+    kw = int(math.ceil((w-size)/float(stride) + 1))
+
+    h = int(math.ceil(kh)*stride + size)
+    w = int(math.ceil(kw)*stride + size)
+
+    out = np.zeros((kh,kw,d))
     # Iterate over values
-    for z in range(d):           # Iterate inwards last
+    for z in range(d):                         # Iterate inwards last
         for y in range(0,h-size,stride):       # Iterate downwards second
            for x in range(0,w-size,stride):    # Iterate sideways first
                out[y/stride, x/stride, z] = np.amax(inp[y:y+size,x:x+size,z])
